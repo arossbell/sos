@@ -22,3 +22,4 @@ class Ubuntu(Plugin, UbuntuPlugin):
             "hwe-support-status --verbose",
             "ubuntu-advantage status"
         ])
+        self.add_copy_spec("/var/log/ubuntu-advantage.log")
