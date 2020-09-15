@@ -30,11 +30,14 @@ class LXD(Plugin, UbuntuPlugin):
             ])
 
             self.add_cmd_output([
-                "lxc image list",
-                "lxc list",
-                "lxc network list",
-                "lxc profile list",
-                "lxc storage list"
+                "lxc image list --format=yaml",
+                "lxc list --format=yaml",
+                "lxc network list --format=yaml",
+                "lxc profile list --format=yaml",
+                "lxc storage list --format=yaml",
+                "lxc cluster list --format=yaml",
+                "lxc project list --format=yaml",
+                "lxc profile show default"
             ])
 
             self.add_cmd_output([
