@@ -19,6 +19,7 @@ class Snap(Plugin, UbuntuPlugin, DebianPlugin, RedHatPlugin):
     packages = ('snapd',)
 
     def setup(self):
+        self.add_copy_spec("/var/lib/snapd/state.json")
         self.add_cmd_output("snap list --all", root_symlink="installed-snaps")
         self.add_cmd_output([
             "snap --version",
@@ -27,5 +28,16 @@ class Snap(Plugin, UbuntuPlugin, DebianPlugin, RedHatPlugin):
         self.add_cmd_output("snap debug connectivity", timeout=10)
         self.add_service_status("snapd")
         self.add_journal(units="snapd")
+
+    def postproc(self):
+        self.do_file_sub(
+            "/var/lib/snapd/state.json",
+            (r"\"(macaroon|store-macaroon|key-id|session-macaroon"
+                r"|macaroon-key)\":\"([A-Za-z0-9_=-]*)\""),
+            r'"\1":"***"')
+        self.do_file_sub(
+            "/var/lib/snapd/state.json",
+            r"\"(store-discharges)\":\[([\"A-Za-z0-9_\-=,]*)\]",
+            r'"\1":[***]')
 
 # vim: set et ts=4 sw=4 :
